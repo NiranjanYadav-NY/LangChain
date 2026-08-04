@@ -1,0 +1,26 @@
+from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+from langchain_core.prompts import PromptTemplate
+load_dotenv()
+
+model = ChatGoogleGenerativeAI(
+    model = "gemini-2.5-flash"
+)
+
+#1st prompt -> detailed report
+template1 = PromptTemplate(
+    template = 'write a detailed report in {topic}',
+    input_variables = ['topic']
+)
+
+#2nd prommpt = -> summary 
+template2 = PromptTemplate(
+    template = 'write a 5 line on the followng text. \n{text}',
+    input_variables=['text']
+)
+
+prompt1 =  template1.invoke({'topic':'black hole'})
+result =  model.invoke(prompt1)
+prompt2 = template2.invoke({'text':result.content})
+result1 = model.invoke(prompt2)
+print(result1.content)  
